@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const generateToken = require("../utils/jwt");
 const { createAccount, checkIfUserExist } = require("../models/account.model");
 
-require("dotenv").config();
 
 async function httpCreateAccount(req, res) {
   try {
