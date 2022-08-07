@@ -1,10 +1,11 @@
 const jsonwebtoken = require("jsonwebtoken");
-const crypto = require("crypto");
+
+require("dotenv").config();
 
 function generateToken(user) {
   return jsonwebtoken.sign(
     { userId: user.userId, username: user.userName },
-    crypto.randomBytes(16).toString("hex"),
+    process.env.JWT_TOKEN,
     {
       expiresIn: "5h",
     }
