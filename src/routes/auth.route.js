@@ -1,13 +1,10 @@
-const express = require("express");
+import { Router } from "express";
 
-const {
-  httpCreateAccount,
-  httpSignIn,
-} = require("../controllers/auth.controller");
+import authController from "../controllers/auth.controller.js";
 
-const authRouter = express.Router();
+const authRouter = Router();
 
-authRouter.post("/createAccount", httpCreateAccount);
-authRouter.post("/signIn", httpSignIn);
+authRouter.post("/createAccount", authController.httpCreateAccount);
+authRouter.post("/signIn", authController.httpSignIn);
 
-module.exports = authRouter;
+export default authRouter;

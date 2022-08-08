@@ -2,18 +2,18 @@
 //App is coming from app.js which is our express app.
 //We now use express as a middleware to handle our requests.
 
-const http = require("http");
-require("dotenv").config();
+import { createServer } from "http";
 
-const app = require("./app");
-const { mongoConnect } = require("./src/services/mongo");
+
+import app from "./app.js";
+import mongo from "./src/services/mongo.js";
 
 const PORT = process.env.PORT;
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 async function startServer() {
-  await mongoConnect();
+  await mongo.mongoConnect();
 
   server.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}...`);

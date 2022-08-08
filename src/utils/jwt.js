@@ -1,6 +1,4 @@
-const jsonwebtoken = require("jsonwebtoken");
-
-require("dotenv").config();
+import jsonwebtoken from "jsonwebtoken";
 
 function generateToken(user) {
   return jsonwebtoken.sign(
@@ -12,4 +10,4 @@ function generateToken(user) {
   );
 }
 
-module.exports = generateToken;
+export default generateToken;

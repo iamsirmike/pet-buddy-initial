@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
-const generateToken = require("../utils/jwt");
-const { createAccount, checkIfUserExist } = require("../models/account.model");
+import generateToken from "../utils/jwt.js";
+import accountModel from "../models/account.model.js";
 
 
 async function httpCreateAccount(req, res) {
@@ -13,7 +13,7 @@ async function httpCreateAccount(req, res) {
       return res.status(400).send("All input is required");
     }
 
-    const findUser = await checkIfUserExist(userData.username);
+    const findUser = await accountModel.checkIfUserExist(userData.username);
 
     if (findUser) {
       return res.status(409).send("A user with this username already exist");
@@ -24,7 +24,7 @@ async function httpCreateAccount(req, res) {
 
     userData.password = encryptedPassword;
 
-    const user = await createAccount(userData);
+    const user = await accountModel.createAccount(userData);
 
     //generate userToken
     const token = generateToken(user);
@@ -81,7 +81,7 @@ async function httpSignIn(req, res) {
   }
 }
 
-module.exports = {
+export default {
   httpCreateAccount,
   httpSignIn,
 };

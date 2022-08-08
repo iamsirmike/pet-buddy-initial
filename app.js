@@ -1,8 +1,11 @@
-const express = require("express");
-const morgan = require("morgan");
-const helmet = require("helmet");
+import dotenv from "dotenv";
+import express, { json } from "express";
+import helmet from "helmet";
+import morgan from "morgan";
 
-const authRouter = require("./src/routes/auth.route");
+import authRouter from "./src/routes/auth.route.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -12,8 +15,8 @@ app.use(helmet());
 //We use morgan to log our requests.
 app.use(morgan("combined"));
 
-app.use(express.json());
+app.use(json());
 
 app.use("/auth", authRouter);
 
-module.exports = app;
+export default app;

@@ -1,5 +1,5 @@
-const accountDb = require("../schemas/account.schema");
-const short = require("short-uuid");
+import shortId from "short-uuid";
+import accountDb from "../schemas/account.schema.js";
 
 async function checkIfUserExist(username) {
   return await accountDb.findOne({
@@ -10,7 +10,7 @@ async function checkIfUserExist(username) {
 async function createAccount(data) {
   try {
     const accountData = Object.assign(data, {
-      userId: short.generate(),
+      userId: shortId.generate(),
     });
     const account = await accountDb.create(accountData);
     return account;
@@ -19,7 +19,7 @@ async function createAccount(data) {
   }
 }
 
-module.exports = {
+export default {
   checkIfUserExist,
   createAccount,
 };
