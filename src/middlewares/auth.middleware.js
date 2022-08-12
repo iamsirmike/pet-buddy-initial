@@ -1,6 +1,5 @@
-import { verify } from "jsonwebtoken";
-
-require("dotenv").config();
+import pkg from 'jsonwebtoken';
+const { verify } = pkg;
 
 const verifyToken = (req, res, next) => {
   const token = req.headers["token"];

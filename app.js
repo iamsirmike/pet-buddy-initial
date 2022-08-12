@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import authRouter from "./src/routes/auth.route.js";
+import verifyRouter from "./src/routes/verify.route.js";
 
 dotenv.config();
 
@@ -18,5 +19,7 @@ app.use(morgan("combined"));
 app.use(json());
 
 app.use("/auth", authRouter);
+
+app.use("/account", verifyRouter);
 
 export default app;

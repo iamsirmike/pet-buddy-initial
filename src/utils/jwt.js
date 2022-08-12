@@ -2,10 +2,10 @@ import jsonwebtoken from "jsonwebtoken";
 
 function generateToken(user) {
   return jsonwebtoken.sign(
-    { userId: user.userId, username: user.userName },
+    { userId: user.userId, username: user.username },
     process.env.JWT_TOKEN,
     {
-      expiresIn: "5h",
+      expiresIn: "1h",
     }
   );
 }

@@ -6,7 +6,7 @@ import { createServer } from "http";
 
 
 import app from "./app.js";
-import mongo from "./src/services/mongo.js";
+import mongo from "./src/db/mongo.js";
 
 const PORT = process.env.PORT;
 
