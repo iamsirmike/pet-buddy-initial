@@ -12,15 +12,11 @@ async function checkIfUserExist(username) {
 }
 
 async function createAccount(data) {
-  try {
-    const accountData = Object.assign(data, {
-      userId: shortId.generate(),
-    });
-    const account = await accountDb.create(accountData);
-    return account;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const accountData = Object.assign(data, {
+    userId: shortId.generate(),
+  });
+  const account = await accountDb.create(accountData);
+  return account;
 }
 
 async function saveOtp(userId, otp) {
