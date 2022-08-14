@@ -72,6 +72,22 @@ async function verifyAccount(data) {
   }
 }
 
+async function updatePassword({ userId, password }) {
+  try {
+    const account = await accountDb.updateOne(
+      {
+        userId: userId,
+      },
+      {
+        password: password,
+      }
+    );
+    return account;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export default {
   checkIfUserExist,
   createAccount,
@@ -79,4 +95,5 @@ export default {
   saveOtp,
   findUserToVerify,
   sendAccountVerificationCode,
+  updatePassword,
 };

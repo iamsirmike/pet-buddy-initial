@@ -36,6 +36,21 @@ accountSchema.pre("save", async function (next) {
   return next();
 });
 
+//hash password before updating password reset
+accountSchema.pre("update", function(next) {
+  const password = this.getUpdate().$set.password;
+  if (!password) {
+      return next();
+  }
+  try {
+      const hash = bcrypt.hash(password, 10);
+      this.getUpdate().$set.password = hash;
+      next();
+  } catch (error) {
+      return next(error);
+  }
+});
+
 //check if passwords match
 accountSchema.methods.isValidPassword = async function (password) {
   const user = this;
