@@ -4,7 +4,7 @@ import { AccountData } from "../schemas/account.schema";
 function generateToken(user: AccountData) {
   return jsonwebtoken.sign(
     { userId: user.userId, username: user.username },
-     'UEsO1gfN7cJqjP96',
+    process.env.JWT_TOKEN!,
     {
       expiresIn: "1h",
     }

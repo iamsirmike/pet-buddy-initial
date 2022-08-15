@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const MONGO_URL: string = "mongodb+srv://iamsirmike:UEsO1gfN7cJqjP96@pet-buddy.u60gwth.mongodb.net/pet-buddy-db?retryWrites=true&w=majority";
-
+const MONGO_URL: string = process.env.MONGO_URL!;
 mongoose.connection.once("open", () => {
   console.log("Mongo connection is ready!");
 });
