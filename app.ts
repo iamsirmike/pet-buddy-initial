@@ -3,8 +3,8 @@ import express, { json } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
-import authRouter from "./src/routes/auth.route.js";
-import verifyRouter from "./src/routes/verify.route.js";
+import { authRouter } from "./src/routes/auth.route";
+import verifyRouter from "./src/routes/verify.route";
 
 dotenv.config();
 

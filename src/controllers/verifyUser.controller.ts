@@ -1,8 +1,8 @@
-import userExistInDb from "../common/userExist.js";
-import accountModel from "../models/account.model.js";
+import { checkIfUserExistInDb } from "../common/userExist";
+import { checkIfUserExist, findUserToVerify, saveOtp, sendAccountVerificationCode, verifyAccount } from "../models/account.model";
 
 //verify users account
-async function httpVerifyUser(req, res) {
+export const httpVerifyUser =async(req:any, res:any) => {
   const { otp } = req.body;
   const username = req.user.username;
 
@@ -14,14 +14,14 @@ async function httpVerifyUser(req, res) {
     return res.send("OTP is required");
   }
 
-  const user = await userExistInDb(username, res);
+  const user = await checkIfUserExistInDb(username, res);
 
   if (user.isVerified) {
     return res.status(400).json({
       message: "User is already verified",
     });
   }
-  const verificationData = await accountModel.findUserToVerify(user.userId);
+  const verificationData = await findUserToVerify(user.userId);
 
   if (!verificationData) {
     return res.send("An error occured, try again");
@@ -31,7 +31,7 @@ async function httpVerifyUser(req, res) {
       message: "Invalid otp, check and try again",
     });
   }
-  await accountModel.verifyAccount(user);
+  await verifyAccount(user);
 
   res.status(200).json({
     message: "account verified",
@@ -39,14 +39,14 @@ async function httpVerifyUser(req, res) {
 }
 
 //request for new verification code
-async function httpRequestVerification(req, res) {
+export const httpRequestVerification = async(req:any, res:any)=>{
   const username = req.user.username;
 
   if (!username) {
     return res.send("You are not authenticated");
   }
 
-  const user = await accountModel.checkIfUserExist(username);
+  const user = await checkIfUserExist(username);
 
   if (!user) {
     return res.status(401).json({
@@ -60,20 +60,15 @@ async function httpRequestVerification(req, res) {
     });
   }
 
-  const otp = await accountModel.sendAccountVerificationCode(user);
+  const otp = await sendAccountVerificationCode(user);
 
   if (!otp) {
     res.send("An error occured");
   }
 
-  await accountModel.saveOtp(user.userId, otp);
+  await saveOtp(user.userId, otp);
 
   res.status(200).json({
     message: "OTP sent successfuolly",
   });
 }
-
-export default {
-  httpVerifyUser,
-  httpRequestVerification,
-};

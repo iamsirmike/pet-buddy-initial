@@ -1,9 +1,10 @@
 import jsonwebtoken from "jsonwebtoken";
+import { AccountData } from "../schemas/account.schema";
 
-function generateToken(user) {
+function generateToken(user: AccountData) {
   return jsonwebtoken.sign(
     { userId: user.userId, username: user.username },
-    process.env.JWT_TOKEN,
+     'UEsO1gfN7cJqjP96',
     {
       expiresIn: "1h",
     }

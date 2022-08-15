@@ -1,17 +1,18 @@
 import shortId from "short-uuid";
-import accountDb from "../schemas/account.schema.js";
-import verification from "../schemas/verification.schema.js";
-import generatedId from "../utils/otpGeneration.js";
+import accountDb from "../schemas/account.schema";
+import verification from "../schemas/verification.schema";
+import {generatedId} from "../utils/otpGeneration";
 
-import { sendVerificationEmail } from "../utils/sendEmailVerification.js";
+import { sendVerificationEmail } from "../utils/sendEmailVerification";
 
-async function checkIfUserExist(username) {
+export const checkIfUserExist = async(username:string) =>{
   return await accountDb.findOne({
     username: username,
   });
 }
 
-async function createAccount(data) {
+//TODO: give data a proper type
+export const createAccount = async(data:any) =>{
   const accountData = Object.assign(data, {
     userId: shortId.generate(),
   });
@@ -19,7 +20,7 @@ async function createAccount(data) {
   return account;
 }
 
-async function saveOtp(userId, otp) {
+export const saveOtp = async(userId:string, otp:string) =>{
   await verification.findOneAndUpdate(
     { userId: userId },
     {
@@ -30,29 +31,33 @@ async function saveOtp(userId, otp) {
   );
 }
 
-async function findUserToVerify(userId) {
+export const findUserToVerify = async(userId:string)=> {
   return verification.findOne({
     userId: userId,
   });
 }
 
-async function sendAccountVerificationCode(user) {
+
+//TODO: give user a proper type
+export const sendAccountVerificationCode = async(user:any)=> {
   //generate otp verification
   const otp = await generatedId();
   //save otp details
   await saveOtp(user.userId, otp);
 
   //send verification email to user
-  await sendVerificationEmail({
-    name: user.username,
-    email: user.email,
-    verificationToken: otp,
-  });
+  await sendVerificationEmail(
+   user.username,
+   user.email,
+   otp,
+  );
 
   return otp;
 }
 
-async function verifyAccount(data) {
+
+//TODO: give data a proper type
+export const verifyAccount = async(data: any) =>{
   try {
     const account = await accountDb.updateOne(
       {
@@ -63,12 +68,12 @@ async function verifyAccount(data) {
       }
     );
     return account;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(error);
   }
 }
 
-async function updatePassword({ userId, password }) {
+export const updatePassword = async(userId:string, password:string) =>{
   try {
     const account = await accountDb.updateOne(
       {
@@ -79,17 +84,7 @@ async function updatePassword({ userId, password }) {
       }
     );
     return account;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(error);
   }
 }
-
-export default {
-  checkIfUserExist,
-  createAccount,
-  verifyAccount,
-  saveOtp,
-  findUserToVerify,
-  sendAccountVerificationCode,
-  updatePassword,
-};
