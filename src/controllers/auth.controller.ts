@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
 import "express-async-errors";
 
+import { Response } from "../common/response";
 import { checkIfUserExistInDb } from "../common/userExist";
 import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../models/account.model";
 import {
@@ -8,41 +8,36 @@ import {
   requestResetPasswordCode,
   saveResetPasswordData
 } from "../models/resetPasswordModel";
+import { AccountData } from "../schemas/account.schema";
 import { SaveResetData } from "../schemas/resetPassword.schema";
 import generateToken from "../utils/jwt";
 
 
-export const  httpCreateAccount = async(req: Request, res:Response) =>{
+
+export const  httpCreateAccount = async(req: any, res:any) => {
   const userData = req.body;
 
   //validate user input
   if (!userData.email || !userData.username || !userData.password) {
-    return res.status(400).send("All input is required");
+    return res.send(Response.responseWithoutData(400, "Missing required fields"));
   }
 
   const findUser = await checkIfUserExist(userData.username);
 
   if (findUser) {
-    return res.status(409).send("A user with this username already exist");
+    return res.ssend(Response.responseWithoutData(409, "Username already exist"));
   }
 
-  const user = await createAccount(userData);
+  const user:AccountData = await createAccount(userData);
 
   await  sendAccountVerificationCode(user);
 
   const token: string = generateToken(user);
 
-  res.status(201).json({
-    message: "Acount created successfully",
-    data: {
-      email: user.email,
-      username: user.username,
-      token: token,
-    },
-  });
+  res.send(Response.responseWithData(200, "Account created successfully", { token }));
 }
 
-export const httpSignIn = async(req:Request, res:Response) =>{
+export const httpSignIn = async(req:any, res:any) => {
   const body = req.body;
 
   //validate user input
@@ -56,9 +51,8 @@ export const httpSignIn = async(req:Request, res:Response) =>{
   const validate = await user.isValidPassword(body.password);
 
   if (!validate) {
-    return res
-      .status(400)
-      .json({ message: "Username or password is wrong, try again" });
+    return res.send(Response.responseWithoutData(401, "Invalid username or password"));
+      
   }
 
   const token = generateToken(user);
@@ -66,13 +60,10 @@ export const httpSignIn = async(req:Request, res:Response) =>{
   // assign JWT
   user.token = token;
 
-  res.status(201).json({
-    username: user.username,
-    token: user.token,
-  });
+  res.send(Response.responseWithData(200, "Login successful", { user }));
 }
 
-export const httpInitiatePasswordReset = async(req:Request, res:Response) =>{
+export const httpInitiatePasswordReset = async(req:any, res:any) => {
   const body = req.body;
 
   if (!body.username) {
@@ -83,12 +74,12 @@ export const httpInitiatePasswordReset = async(req:Request, res:Response) =>{
   const user = await checkIfUserExist(body.username);
 
   if (!user) {
-    return res.status(409).send("User does not exist");
+    return res.send(Response.responseWithoutData(404, "User not found"));
   }
 
-  const otp = await requestResetPasswordCode(user);
+  const otp: string = await requestResetPasswordCode(user);
 
-  const dataToSave: SaveResetData ={
+  const dataToSave: SaveResetData = {
     userId: user.userId,
     email: user.email,
     resetPasswordCode: otp,
@@ -97,29 +88,24 @@ export const httpInitiatePasswordReset = async(req:Request, res:Response) =>{
 
   await saveResetPasswordData(dataToSave);
 
-  res.status(200).json({
-    message:
-      "Password reset initiated, check the email associated with this account for a reset code",
-  });
+  res.send(Response.responseWithoutData(200, "Reset password code sent to the email associated with the account"));
 }
 
-export const httpCompletePasswordReset= async(req:Request, res:Response) =>{
+export const httpCompletePasswordReset= async(req:any, res:any) => {
   const { username, otp, password } = req.body;
 
   if (!(username || otp || password)) {
-    return res.send({
-      message: "Username, password or otp is missing",
-    });
+    return res.send(Response.responseWithoutData(400, "All inputs are required"));
   }
   const user = await checkIfUserExist(username);
 
   if (!user) {
-    return res.status(409).send("User does not exist");
+    return res.send(Response.responseWithoutData(404, "User not found"));
   }
 
   const dataExist = await checkIfResetDataExit(user.userId);
   if (!dataExist) {
-    return res.send("An error occured");
+    return res.send(Response.responseWithoutData(404, "Reset data not found"));
   }
 
   await updatePassword(
@@ -127,8 +113,6 @@ export const httpCompletePasswordReset= async(req:Request, res:Response) =>{
    password,
   );
 
-  res.status(200).json({
-    message: "Password reset sucessful",
-  });
+  res.send(Response.responseWithoutData(200, "Password updated successfully"));
 }
 
