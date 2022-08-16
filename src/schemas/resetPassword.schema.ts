@@ -14,13 +14,13 @@ const resetPasswordSchema = new mongoose.Schema<SaveResetData>({
   },
 });
 
-export interface SaveResetData {
+export class SaveResetData {
   userId: string;
   email: string;
   resetPasswordCode: string;
 }
 
-export interface RequestResetData {
+export class RequestResetData {
   username: string;
   email: string;
 }
