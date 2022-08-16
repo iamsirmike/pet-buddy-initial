@@ -6,14 +6,14 @@ import { createServer, Server } from "http";
 
 
 import app from "./app";
-import mongo from "./src/db/mongo";
+import {MongoConnect} from "./src/db/mongo";
 
 const PORT = process.env.PORT;
 
 const server: Server = createServer(app);
 
 async function startServer() {
-  await mongo.mongoConnect();
+  await MongoConnect.mongoConnect();
 
   server.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}...`);

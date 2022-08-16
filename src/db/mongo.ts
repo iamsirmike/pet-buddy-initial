@@ -1,23 +1,20 @@
 import mongoose from "mongoose";
 
-const MONGO_URL: string = process.env.MONGO_URL!;
-mongoose.connection.once("open", () => {
-  console.log("Mongo connection is ready!");
-});
-
-mongoose.connection.on("err", () => {
-  console.error("Mongo connection error!");
-});
-
-async function mongoConnect() {
-  await mongoose.connect(MONGO_URL);
+export class MongoConnect{
+ static openMongoConnection = mongoose.connection.once("open", () => {
+    console.log("Mongo connection is ready!");
+  });
+  
+ static mongoErr =  mongoose.connection.on("err", () => {
+    console.error("Mongo connection error!");
+  });
+  
+  static mongoConnect = async()=> {
+    const MONGO_URL: string = process.env.MONGO_URL || "4000";
+    await mongoose.connect(MONGO_URL);
+  }
+  
+ static mongoDisconnect = async()=> {
+    await mongoose.disconnect();
+  }
 }
-
-async function mongoDisconnect() {
-  await mongoose.disconnect();
-}
-
-export default {
-  mongoConnect,
-  mongoDisconnect,
-};

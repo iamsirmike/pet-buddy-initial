@@ -51,7 +51,7 @@ const accountSchema = new mongoose.Schema<AccountData>({
 //   }
 // });
 
-export interface AccountData{
+export class AccountData{
   userId: string;
   username: string;
   email: string;

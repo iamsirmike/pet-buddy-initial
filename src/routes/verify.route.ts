@@ -1,15 +1,19 @@
 import { Router } from "express";
 
-import { httpRequestVerification, httpVerifyUser } from "../controllers/verifyUser.controller";
+import { VerifyUserController } from "../controllers/verifyUser.controller";
+import { AccountModel } from "../models/account.model";
+
 import auth from "../middlewares/auth.middleware";
 
 const verifyRouter: Router = Router();
 
-verifyRouter.post("/verify", auth, httpVerifyUser);
+const verifyUserController = new VerifyUserController(new AccountModel());
+
+verifyRouter.post("/verify", auth, verifyUserController.httpVerifyUser);
 verifyRouter.post(
   "/requestVerification",
   auth,
-httpRequestVerification
+  verifyUserController.httpRequestVerification
 );
 
 export default verifyRouter;

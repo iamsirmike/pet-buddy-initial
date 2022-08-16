@@ -1,18 +1,22 @@
 import { Router } from "express";
 
-import { httpCompletePasswordReset, httpCreateAccount, httpInitiatePasswordReset, httpSignIn } from "../controllers/auth.controller";
+import { AccountController } from "../controllers/auth.controller";
+import { AccountModel } from "../models/account.model";
+
 
 export const authRouter: Router = Router();
 
-authRouter.post("/createAccount", httpCreateAccount);
-authRouter.post("/signIn", httpSignIn);
+const accountController = new AccountController(new AccountModel());
+
+authRouter.post("/createAccount", accountController.httpCreateAccount);
+authRouter.post("/signIn", accountController.httpSignIn);
 authRouter.post(
   "/initiatePasswordReset",
-httpInitiatePasswordReset
+  accountController.httpInitiatePasswordReset
 );
 authRouter.post(
   "/completePasswordReset",
-  httpCompletePasswordReset
+  accountController.httpCompletePasswordReset
 );
 
  
