@@ -1,7 +1,8 @@
-// import nan0id from 'nanoid';
+// import { Nanoid } from '../utils/types/nanoid';
+// const nanoid : Nanoid = require('nanoid/async');
+
 
 export const generatedId = async() => {
-  // const nanoid = customAlphabet("1234567890", 6);
+  // const code =  nanoid.customAlphabet("1234567890", 6);
   return "123456";
 }
-

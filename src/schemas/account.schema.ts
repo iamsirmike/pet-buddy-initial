@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { AccountData } from "../interfaces/accountInterface";
 
-const accountSchema = new mongoose.Schema<AccountData>({
+const accountSchema = new mongoose.Schema({
   userId: {
     type: String,
     require: true,
@@ -27,16 +28,17 @@ const accountSchema = new mongoose.Schema<AccountData>({
   },
 });
 
-//hash the password before saving
-// accountSchema.pre("save", async function (next) {
-//   const user = this;
-//   const hash = await bcrypt.hash(user.password, 10);
+// hash the password before saving
+accountSchema.pre("save", async function (next) {
+  const user = this as AccountData;
+  const hash = await bcrypt.hash(user.password, 10);
 
-//   this.password = hash;
-//   return next();
-// });
+  this.password = hash;
+  return next();
+});
 
-// //hash password before updating password reset
+
+//hash password before updating password reset
 // accountSchema.pre("update", function(next) {
 //   const password = this.getUpdate().$set.password;
 //   if (!password) {
@@ -46,18 +48,11 @@ const accountSchema = new mongoose.Schema<AccountData>({
 //       const hash = bcrypt.hash(password, 10);
 //       this.getUpdate().$set.password = hash;
 //       next();
-//   } catch (error) {
+//   } catch (error:any) {
 //       return next(error);
 //   }
 // });
 
-export interface AccountData{
-  userId: string;
-  username: string;
-  email: string;
-  password: string;
-  isVerified: boolean;
-}
 
 //check if passwords match
 accountSchema.methods.isValidPassword = async function (password:string) {
@@ -67,4 +62,6 @@ accountSchema.methods.isValidPassword = async function (password:string) {
   return compare;
 };
 
-export default mongoose.model("Account", accountSchema);
+export default mongoose.model<AccountData>("Account", accountSchema);
+
+

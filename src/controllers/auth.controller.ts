@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import "express-async-errors";
 
 import { Response } from "../common/response";
@@ -8,7 +9,7 @@ import {
   requestResetPasswordCode,
   saveResetPasswordData
 } from "../models/resetPasswordModel";
-import { AccountData } from "../schemas/account.schema";
+import { AccountData } from "../interfaces/accountInterface";
 import { SaveResetData } from "../schemas/resetPassword.schema";
 import generateToken from "../utils/jwt";
 
@@ -107,10 +108,10 @@ export const httpCompletePasswordReset= async(req:any, res:any) => {
   if (!dataExist) {
     return res.send(Response.responseWithoutData(404, "Reset data not found"));
   }
-
+  const hashedPassword: string = await bcrypt.hash(password, 10);
   await updatePassword(
    user.userId,
-   password,
+   hashedPassword,
   );
 
   res.send(Response.responseWithoutData(200, "Password updated successfully"));

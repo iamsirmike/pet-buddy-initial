@@ -1,7 +1,8 @@
 import shortId from "short-uuid";
+import { AccountData } from "../interfaces/accountInterface";
 import accountDb from "../schemas/account.schema";
 import verification from "../schemas/verification.schema";
-import {generatedId} from "../utils/otpGeneration";
+import { generatedId } from "../utils/otpGeneration";
 
 import { sendVerificationEmail } from "../utils/sendEmailVerification";
 
@@ -13,7 +14,7 @@ export const checkIfUserExist = async(username:string) =>{
 
 //TODO: give data a proper type
 export const createAccount = async(data:any) =>{
-  const accountData = Object.assign(data, {
+  const accountData: AccountData = Object.assign(data, {
     userId: shortId.generate(),
   });
   const account = await accountDb.create(accountData);
@@ -39,7 +40,7 @@ export const findUserToVerify = async(userId:string)=> {
 
 
 //TODO: give user a proper type
-export const sendAccountVerificationCode = async(user:any)=> {
+export const sendAccountVerificationCode = async(user:AccountData) => {
   //generate otp verification
   const otp = await generatedId();
   //save otp details
@@ -57,7 +58,7 @@ export const sendAccountVerificationCode = async(user:any)=> {
 
 
 //TODO: give data a proper type
-export const verifyAccount = async(data: any) =>{
+export const verifyAccount = async(data:AccountData) => {
   try {
     const account = await accountDb.updateOne(
       {

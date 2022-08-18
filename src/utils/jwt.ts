@@ -1,5 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
-import { AccountData } from "../schemas/account.schema";
+import { AccountData } from "../interfaces/accountInterface";
 
 function generateToken(user: AccountData) {
   return jsonwebtoken.sign(
