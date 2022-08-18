@@ -1,17 +1,18 @@
 import bcrypt from "bcryptjs";
 import "express-async-errors";
 
-import { Response } from "../common/response";
-import { checkIfUserExistInDb } from "../common/userExist";
-import { AccountData } from "../interfaces/accountInterface";
-import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../models/accountModel";
+import { Response } from "../../common/response";
+import { checkIfUserExistInDb } from "../../common/userExist";
+import { AccountData } from "../../interfaces/accountInterface";
+import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../../models/accountModel";
 import {
   checkIfResetDataExit,
   requestResetPasswordCode,
   saveResetPasswordData
-} from "../models/resetPasswordModel";
-import { SaveResetData } from "../schemas/resetPassword.schema";
-import generateToken from "../utils/jwt";
+} from "../../models/resetPasswordModel";
+import { SaveResetData } from "../../schemas/resetPassword.schema";
+import generateToken from "../../utils/jwt";
+import { authValidator } from "./authValidator";
 
 
 
@@ -19,8 +20,10 @@ export const  httpCreateAccount = async(req: any, res:any) => {
   const userData = req.body;
 
   //validate user input
-  if (!userData.email || !userData.username || !userData.password) {
-    return res.send(Response.responseWithoutData(400, "Missing required fields"));
+  const validateData = await authValidator(userData);
+
+  if(validateData){
+    return res.send(Response.responseWithoutData(400, validateData));
   }
 
   const findUser = await checkIfUserExist(userData.username);

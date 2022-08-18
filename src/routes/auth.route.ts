@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { httpCompletePasswordReset, httpCreateAccount, httpInitiatePasswordReset, httpSignIn } from "../controllers/auth.controller";
+import { httpCompletePasswordReset, httpCreateAccount, httpInitiatePasswordReset, httpSignIn } from "../controllers/auth/auth.controller";
 
 export const authRouter: Router = Router();
 
