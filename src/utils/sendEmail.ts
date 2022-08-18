@@ -1,8 +1,8 @@
-import nodemailer from "nodemailer";
-import { nodeMailerConfig } from "./nodeMailConfig.js";
+import nodemailer from 'nodemailer';
+import { nodeMailerConfig } from "./nodeMailConfig";
 
-export async function sendEmail({ to, subject, html }) {
-  const testAccount = nodemailer.createTestAccount();
+export  const sendEmail = async(to: string, subject :string, html :string): Promise<any> => {
+  // const testAccount = nodemailer.createTestAccount();
 
   const transporter = nodemailer.createTransport(nodeMailerConfig);
 

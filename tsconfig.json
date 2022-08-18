@@ -1,0 +1,15 @@
+{
+    "extends": "@tsconfig/node16/tsconfig.json",
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "noUnusedLocals": true,
+      "strictNullChecks": true,
+      "strictPropertyInitialization": false,
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"],
+   
+
+
+  }

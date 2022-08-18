@@ -3,8 +3,8 @@ import express, { json } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
-import authRouter from "./src/routes/auth.route.js";
-import verifyRouter from "./src/routes/verify.route.js";
+import accountRouter from "./src/routes/accountRoute";
+import { authRouter } from "./src/routes/auth.route";
 
 dotenv.config();
 
@@ -20,6 +20,8 @@ app.use(json());
 
 app.use("/auth", authRouter);
 
-app.use("/account", verifyRouter);
+app.use("/account", accountRouter);
+app.use("/account", accountRouter);
+
 
 export default app;

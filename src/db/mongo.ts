@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 
-const MONGO_URL = process.env.MONGO_URL;
-
+const MONGO_URL: string = process.env.MONGO_URL!;
 mongoose.connection.once("open", () => {
   console.log("Mongo connection is ready!");
 });
 
 mongoose.connection.on("err", () => {
-  console.error(err);
+  console.error("Mongo connection error!");
 });
 
 async function mongoConnect() {

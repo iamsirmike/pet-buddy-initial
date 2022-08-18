@@ -2,15 +2,15 @@
 //App is coming from app.js which is our express app.
 //We now use express as a middleware to handle our requests.
 
-import { createServer } from "http";
+import { createServer, Server } from "http";
 
 
-import app from "./app.js";
-import mongo from "./src/db/mongo.js";
+import app from "./app";
+import mongo from "./src/db/mongo";
 
 const PORT = process.env.PORT;
 
-const server = createServer(app);
+const server: Server = createServer(app);
 
 async function startServer() {
   await mongo.mongoConnect();
