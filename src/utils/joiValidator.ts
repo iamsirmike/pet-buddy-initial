@@ -1,8 +1,8 @@
 import Joi from "joi";
 
-export const joiValidator = async(joiSchema: Joi.ObjectSchema<any>, paramsToValidate: any) => {
+export const joiValidator = (joiSchema: Joi.ObjectSchema<any>, paramsToValidate: any): string | null => {
 
-const { error } = await joiSchema.validateAsync(paramsToValidate,  {
+const { error} = joiSchema.validate(paramsToValidate,  {
     errors: {
       wrap: {
         label: ''

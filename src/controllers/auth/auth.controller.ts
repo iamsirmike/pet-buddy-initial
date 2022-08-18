@@ -12,7 +12,7 @@ import {
 } from "../../models/resetPasswordModel";
 import { SaveResetData } from "../../schemas/resetPassword.schema";
 import generateToken from "../../utils/jwt";
-import { createAccountValidator } from "./authValidator";
+import { completePasswordResetValidator, createAccountValidator, inititiatePasswordResetValidator, signInValidator } from "./authValidator";
 
 
 
@@ -42,19 +42,25 @@ export const  httpCreateAccount = async(req: any, res:any) => {
 }
 
 export const httpSignIn = async(req:any, res:any) => {
-  const body = req.body;
+  const {username, password} = req.body;
 
-  //validate user input
-  if (!(body.username && body.password)) {
-    return res.status(400).send("All inputs are required");
+  const data = {
+    username: username,
+    password: password
   }
+ //validate user input
+ const validateData = await signInValidator(data);
+
+ if(validateData){
+   return res.send(Response.responseWithoutData(400, validateData));
+ }
 
   //check if a user with the provided username exist
-  const user = await checkIfUserExistInDb(body.username, res);
+  const user = await checkIfUserExistInDb(username, res);
 
-  const validate = await user.isValidPassword(body.password);
+  const validatePassword = await user.isValidPassword(password);
 
-  if (!validate) {
+  if (!validatePassword) {
     return res.send(Response.responseWithoutData(401, "Invalid username or password"));
       
   }
@@ -71,14 +77,15 @@ export const httpSignIn = async(req:any, res:any) => {
 }
 
 export const httpInitiatePasswordReset = async(req:any, res:any) => {
-  const body = req.body;
+  const {username}:{username:string} = req.body;
 
-  if (!body.username) {
-    return res.send({
-      message: "username is required",
-    });
+  //validate user input
+  const validateData = await inititiatePasswordResetValidator(username);
+
+  if(validateData){
+    return res.send(Response.responseWithoutData(400, validateData));
   }
-  const user = await checkIfUserExist(body.username);
+  const user = await checkIfUserExist(username);
 
   if (!user) {
     return res.send(Response.responseWithoutData(404, "User not found"));
@@ -101,9 +108,19 @@ export const httpInitiatePasswordReset = async(req:any, res:any) => {
 export const httpCompletePasswordReset= async(req:any, res:any) => {
   const { username, otp, password } = req.body;
 
-  if (!(username || otp || password)) {
-    return res.send(Response.responseWithoutData(400, "All inputs are required"));
+   const data = {
+    username: username,
+    otp: otp,
+    password: password
+   }
+
+  //validate user input
+  const validateData = await completePasswordResetValidator(data);
+
+  if(validateData){
+    return res.send(Response.responseWithoutData(400, validateData));
   }
+
   const user = await checkIfUserExist(username);
 
   if (!user) {
@@ -115,6 +132,7 @@ export const httpCompletePasswordReset= async(req:any, res:any) => {
     return res.send(Response.responseWithoutData(404, "Reset data not found"));
   }
   const hashedPassword: string = await bcrypt.hash(password, 10);
+  
   await updatePassword(
    user.userId,
    hashedPassword,
