@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { UserProfileData } from "../interfaces/userProfileInterface";
 
 const userProfileSchema = new mongoose.Schema({
   userId: {
@@ -21,4 +22,4 @@ const userProfileSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Profile", userProfileSchema);
+export default mongoose.model<UserProfileData>("Profile", userProfileSchema);
