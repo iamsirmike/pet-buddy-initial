@@ -12,8 +12,7 @@ export const checkIfUserExist = async(username:string) =>{
   });
 }
 
-//TODO: give data a proper type
-export const createAccount = async(data:any) =>{
+export const createAccount = async(data:AccountData) => {
   const accountData: AccountData = Object.assign(data, {
     userId: shortId.generate(),
   });
@@ -21,7 +20,7 @@ export const createAccount = async(data:any) =>{
   return account;
 }
 
-export const saveOtp = async(userId:string, otp:string) =>{
+export const saveOtp = async(userId:string, otp:string) => {
   await verification.findOneAndUpdate(
     { userId: userId },
     {
@@ -39,7 +38,6 @@ export const findUserToVerify = async(userId:string)=> {
 }
 
 
-//TODO: give user a proper type
 export const sendAccountVerificationCode = async(user:AccountData) => {
   //generate otp verification
   const otp = await generatedId();
@@ -57,7 +55,6 @@ export const sendAccountVerificationCode = async(user:AccountData) => {
 }
 
 
-//TODO: give data a proper type
 export const verifyAccount = async(data:AccountData) => {
   try {
     const account = await accountDb.updateOne(
