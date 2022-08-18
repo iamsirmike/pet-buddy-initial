@@ -12,7 +12,7 @@ import {
 } from "../../models/resetPasswordModel";
 import { SaveResetData } from "../../schemas/resetPassword.schema";
 import generateToken from "../../utils/jwt";
-import { authValidator } from "./authValidator";
+import { createAccountValidator } from "./authValidator";
 
 
 
@@ -20,7 +20,7 @@ export const  httpCreateAccount = async(req: any, res:any) => {
   const userData = req.body;
 
   //validate user input
-  const validateData = await authValidator(userData);
+  const validateData = await createAccountValidator(userData);
 
   if(validateData){
     return res.send(Response.responseWithoutData(400, validateData));
