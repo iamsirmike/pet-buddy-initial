@@ -4,7 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import { authRouter } from "./src/routes/auth.route";
-import verifyRouter from "./src/routes/verify.route";
+import verifyRouter from "./src/routes/accountRoute";
 
 dotenv.config();
 

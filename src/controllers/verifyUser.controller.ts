@@ -1,5 +1,5 @@
 import { checkIfUserExistInDb } from "../common/userExist";
-import { checkIfUserExist, findUserToVerify, saveOtp, sendAccountVerificationCode, verifyAccount } from "../models/account.model";
+import { checkIfUserExist, findUserToVerify, saveOtp, sendAccountVerificationCode, verifyAccount } from "../models/accountModel";
 
 //verify users account
 export const httpVerifyUser =async(req:any, res:any) => {

@@ -1,4 +1,4 @@
-import { checkIfUserExist } from "../models/account.model";
+import { checkIfUserExist } from "../models/accountModel";
 
 export const checkIfUserExistInDb = async(username:string, res:any)=> {
   const user = await checkIfUserExist(username);

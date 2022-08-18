@@ -3,7 +3,7 @@ import "express-async-errors";
 
 import { Response } from "../common/response";
 import { checkIfUserExistInDb } from "../common/userExist";
-import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../models/account.model";
+import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../models/accountModel";
 import {
   checkIfResetDataExit,
   requestResetPasswordCode,
