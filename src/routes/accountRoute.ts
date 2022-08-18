@@ -1,15 +1,22 @@
 import { Router } from "express";
 
-import { httpRequestVerification, httpVerifyUser } from "../controllers/verifyUser.controller";
+import { httpRequestVerification, httpUpdateProfile, httpVerifyUser } from "../controllers/accountController";
 import auth from "../middlewares/auth.middleware";
 
-const verifyRouter: Router = Router();
+const accountRouter: Router = Router();
 
-verifyRouter.post("/verify", auth, httpVerifyUser);
-verifyRouter.post(
+accountRouter.post("/verify", auth, httpVerifyUser);
+
+accountRouter.post(
   "/requestVerification",
   auth,
 httpRequestVerification
 );
 
-export default verifyRouter;
+accountRouter.put(
+  "/updateProfile",
+  auth,
+  httpUpdateProfile
+);
+
+export default accountRouter;

@@ -1,6 +1,4 @@
-import { UserData } from "./userInterface";
-
-export interface AccountData extends UserData {
+export interface AccountData {
     userId: string;
     username: string;
     email: string;

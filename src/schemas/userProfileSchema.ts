@@ -14,9 +14,6 @@ const userProfileSchema = new mongoose.Schema({
   lastName: {
     type: String,
   },
-  email: {
-    type: String,
-  },
   phone: {
     type: String,
   },

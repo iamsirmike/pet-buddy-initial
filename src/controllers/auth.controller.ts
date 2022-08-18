@@ -3,13 +3,13 @@ import "express-async-errors";
 
 import { Response } from "../common/response";
 import { checkIfUserExistInDb } from "../common/userExist";
+import { AccountData } from "../interfaces/accountInterface";
 import { checkIfUserExist, createAccount, sendAccountVerificationCode, updatePassword } from "../models/accountModel";
 import {
   checkIfResetDataExit,
   requestResetPasswordCode,
   saveResetPasswordData
 } from "../models/resetPasswordModel";
-import { AccountData } from "../interfaces/accountInterface";
 import { SaveResetData } from "../schemas/resetPassword.schema";
 import generateToken from "../utils/jwt";
 
@@ -61,7 +61,10 @@ export const httpSignIn = async(req:any, res:any) => {
   // assign JWT
   user.token = token;
 
-  res.send(Response.responseWithData(200, "Login successful", { user }));
+  res.send(Response.responseWithData(200, "Login successful", {
+    username: user.username,
+     token:token,
+  }));
 }
 
 export const httpInitiatePasswordReset = async(req:any, res:any) => {

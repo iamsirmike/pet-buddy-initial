@@ -1,12 +1,14 @@
 import shortId from "short-uuid";
 import { AccountData } from "../interfaces/accountInterface";
+import { UserProfileData } from "../interfaces/userProfileInterface";
 import accountDb from "../schemas/account.schema";
+import userProfileSchema from "../schemas/userProfileSchema";
 import verification from "../schemas/verification.schema";
 import { generatedId } from "../utils/otpGeneration";
 
 import { sendVerificationEmail } from "../utils/sendEmailVerification";
 
-export const checkIfUserExist = async(username:string) =>{
+export const checkIfUserExist = async(username:string) => {
   return await accountDb.findOne({
     username: username,
   });
@@ -71,7 +73,7 @@ export const verifyAccount = async(data:AccountData) => {
   }
 }
 
-export const updatePassword = async(userId:string, password:string) =>{
+export const updatePassword = async(userId:string, password:string) => {
   try {
     const account = await accountDb.updateOne(
       {
@@ -85,4 +87,25 @@ export const updatePassword = async(userId:string, password:string) =>{
   } catch (error:any) {
     throw new Error(error);
   }
+}
+
+export const updateProfile = async(data: UserProfileData) => {
+  try {
+    const profile = await userProfileSchema.findOneAndUpdate(
+      {
+        userId: data.userId,
+      },
+      {
+        userId: data.userId,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        phone: data.phone,
+      },
+      { upsert: true },
+    );
+    return profile;
+  } catch (error:any) {
+    throw new Error(error);
+  }
+
 }
