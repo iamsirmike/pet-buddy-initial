@@ -95,16 +95,20 @@ const dataToSave: UserProfileData = {
  userId: user.userId,
  firstname: firstname,
  lastname:lastname,
- phone:phone,
+ phone: phone,
 
 }
 
-await updateProfile(dataToSave);
+const updatedData = await updateProfile(dataToSave);
+if(!updatedData){
+  return res.send(Response.responseWithoutData(500, "An error occured"));
+}
+
 
 res.send(Response.responseWithData(200, 'User profile updated successfully', {
-  firstname: firstname,
-  lastname: lastname,
-  phone: phone,
+  firstname: updatedData.firstname,
+  lastname: updatedData.lastname,
+  phone: updatedData.phone,
 }));
 
 }

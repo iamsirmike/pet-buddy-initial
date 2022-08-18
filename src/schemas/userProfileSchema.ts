@@ -8,10 +8,10 @@ const userProfileSchema = new mongoose.Schema({
     unique: true,
     ref: "Account",
   },
-  firstName: {
+  firstname: {
     type: String,
   },
-  lastName: {
+  lastname: {
     type: String,
   },
   phone: {

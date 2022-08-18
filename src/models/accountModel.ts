@@ -33,7 +33,7 @@ export const saveOtp = async(userId:string, otp:string) => {
   );
 }
 
-export const findUserToVerify = async(userId:string)=> {
+export const findUserToVerify = async(userId:string) => {
   return verification.findOne({
     userId: userId,
   });
@@ -95,12 +95,7 @@ export const updateProfile = async(data: UserProfileData) => {
       {
         userId: data.userId,
       },
-      {
-        userId: data.userId,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        phone: data.phone,
-      },
+     data,
       { upsert: true },
     );
     return profile;
